@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Mood Log - Serenemind{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-display font-bold text-white text-center mb-8 animate-fade-in">Edit Mood Log</h1>
+
+    <div class="glass-effect p-8 rounded-2xl">
+        <form action="{{ url_for('edit_mood', id=log.id) }}" method="post">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl text-white mb-4">How are you feeling?</h2>
+                <div class="grid grid-cols-5 gap-4">
+                    <button name="mood" value="ecstatic" class="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12 focus:outline-none p-4 rounded-xl hover-glow {% if log.mood == 'ecstatic' %}ring-4 ring-cyan-300{% endif %}">😃</button>
+                    <button name="mood" value="happy" class="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12 focus:outline-none p-4 rounded-xl hover-glow {% if log.mood == 'happy' %}ring-4 ring-cyan-300{% endif %}">🙂</button>
+                    <button name="mood" value="neutral" class="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12 focus:outline-none p-4 rounded-xl hover-glow {% if log.mood == 'neutral' %}ring-4 ring-cyan-300{% endif %}">😐</button>
+                    <button name="mood" value="sad" class="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12 focus:outline-none p-4 rounded-xl hover-glow {% if log.mood == 'sad' %}ring-4 ring-cyan-300{% endif %}">😕</button>
+                    <button name="mood" value="awful" class="text-6xl transform transition-all duration-300 hover:scale-125 hover:rotate-12 focus:outline-none p-4 rounded-xl hover-glow {% if log.mood == 'awful' %}ring-4 ring-cyan-300{% endif %}">😞</button>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-xl shadow-lg">
+                    Update Mood ✨
+                </button>
+            </div>
+        </form>
+        <div class="mt-4">
+            <a href="{{ url_for('journal') }}" class="text-cyan-300 hover:text-cyan-100 transition-colors">← Back to Journal</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

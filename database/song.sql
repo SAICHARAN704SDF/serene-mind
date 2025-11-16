@@ -1,0 +1,7 @@
+-- Song table
+CREATE TABLE song (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    artist VARCHAR(100) NOT NULL,
+    url VARCHAR(200) NOT NULL
+);

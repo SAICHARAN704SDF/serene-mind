@@ -8,6 +8,11 @@ venv/
 .venv/
 pip-log.txt
 pip-delete-this-directory.txt
+.env
+instance/
+*.db
+*.sqlite
+*.sqlite3
 .tox/
 .coverage
 .coverage.*
