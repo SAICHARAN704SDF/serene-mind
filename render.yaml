@@ -7,3 +7,15 @@ services:
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: serenemind-db
+          property: connectionString
+      - key: API_KEY
+        sync: false  # Set this in Render dashboard
+      - key: SECRET_KEY
+        generateValue: true
+databases:
+  - name: serenemind-db
+    databaseName: serenemind
+    user: serenemind_user
