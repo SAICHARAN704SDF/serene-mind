@@ -79,9 +79,7 @@ class BillingRecord(db.Model):
     notes = db.Column(db.Text)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Create database tables
-with app.app_context():
-    db.create_all()
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
 # AI Chat setup
 genai.configure(api_key=os.getenv('API_KEY'))

@@ -2,6 +2,7 @@ services:
   - type: web
     name: serenemind
     runtime: python3
+    preDeployCommand: "flask db upgrade"
     buildCommand: pip install -r requirements.txt
     startCommand: python app.py
     envVars:
@@ -15,6 +16,8 @@ services:
         sync: false  # Set this in Render dashboard
       - key: SECRET_KEY
         generateValue: true
+      - key: FLASK_APP
+        value: app.py
 databases:
   - name: serenemind-db
     databaseName: serenemind
