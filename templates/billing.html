@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Billing Management - Serenemind{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-display font-bold text-white text-center mb-8 animate-fade-in">Billing Management</h1>
+
+    <!-- Add Billing Record Form -->
+    <div class="glass-effect p-8 rounded-2xl mb-8">
+        <h2 class="text-3xl font-bold text-white mb-6">Create Billing Record</h2>
+        <form action="{{ url_for('add_billing') }}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Patient</label>
+                <select name="patient_id" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+                    <option value="">Select a patient</option>
+                    {% for patient in patients %}
+                    <option value="{{ patient.id }}">{{ patient.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Appointment</label>
+                <select name="appointment_id" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+                    <option value="">Select an appointment</option>
+                    {% for appointment in appointments %}
+                    <option value="{{ appointment.id }}">{{ appointment.patient.name }} - {{ appointment.date }} {{ appointment.time }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Service Description</label>
+                <input type="text" name="service_description" placeholder="e.g., Consultation, Check-up, Treatment" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+            </div>
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Amount ($)</label>
+                <input type="number" name="amount" step="0.01" placeholder="0.00" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+            </div>
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Payment Status</label>
+                <select name="payment_status" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-white text-lg font-medium mb-2">Due Date</label>
+                <input type="date" name="due_date" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg" required>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-white text-lg font-medium mb-2">Additional Notes</label>
+                <textarea name="notes" rows="3" placeholder="Insurance information, payment method, or special billing notes" class="w-full p-4 rounded-xl border-2 border-cyan-300 bg-white/90 text-gray-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transition-all duration-300 text-lg resize-none"></textarea>
+            </div>
+            <div class="md:col-span-2">
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-xl shadow-lg">
+                    Create Billing Record 💳
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Billing Records List -->
+    <div class="glass-effect p-8 rounded-2xl">
+        <h2 class="text-3xl font-bold text-white mb-6">Billing Records</h2>
+        <div class="grid gap-6">
+            {% for record in billing_records %}
+            <div class="bg-white/10 p-6 rounded-xl hover-glow transition-all duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">{{ record.patient.name }}</h3>
+                        <p class="text-cyan-300 text-lg">{{ record.service_description }}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xl font-bold text-green-400">${{ "%.2f"|format(record.amount) }}</span>
+                        <span class="block text-sm text-gray-400 bg-{{ 'green' if record.payment_status == 'paid' else 'yellow' if record.payment_status == 'pending' else 'red' }}-500/20 px-3 py-1 rounded-full mt-1">
+                            {{ record.payment_status.title() }}
+                        </span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-300">
+                    <div>
+                        <span class="font-medium text-white">Appointment:</span> {{ record.appointment.date }} {{ record.appointment.time }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-white">Due Date:</span> {{ record.due_date }}
+                    </div>
+                    <div>
+                        <span class="font-medium text-white">Doctor:</span> Dr. {{ record.appointment.doctor.name }}
+                    </div>
+                    {% if record.notes %}
+                    <div class="md:col-span-3">
+                        <span class="font-medium text-white">Notes:</span>
+                        <p class="mt-1 text-sm leading-relaxed">{{ record.notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not billing_records %}
+        <div class="text-center py-12">
+            <div class="text-8xl mb-4">💳</div>
+            <h3 class="text-2xl font-bold text-white mb-4">No Billing Records Yet</h3>
+            <p class="text-gray-300 text-lg">Create your first billing record to start managing healthcare payments.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
