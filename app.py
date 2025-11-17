@@ -28,6 +28,10 @@ from models import db
 db.init_app(app)
 migrate = Migrate(app, db)
 
+with app.app_context():
+    db.create_all()
+
+
 from models import Song, JournalEntry, MoodLog, Patient, Doctor, Appointment, BillingRecord
 
 # AI Chat setup
