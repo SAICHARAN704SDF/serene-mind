@@ -17,6 +17,10 @@ if not database_url:
     db_host = os.getenv('DB_HOST', 'localhost')
     db_name = os.getenv('DB_NAME', 'serenemind')
     database_url = f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}'
+else:
+    # For production (PostgreSQL), ensure we use psycopg3
+    if database_url.startswith('postgresql://'):
+        database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
